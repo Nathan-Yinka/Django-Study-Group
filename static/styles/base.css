@@ -1,0 +1,13 @@
+.follow-con{
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin: auto;
+    margin-top: 2rem;
+}
+
+.edit_con{
+    height: 70vh !important;
+    overflow: auto;
+    padding: 0 20px;
+}
