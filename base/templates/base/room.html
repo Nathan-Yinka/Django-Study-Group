@@ -139,8 +139,9 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(".thread-con");
-
+    let fetching = false
     async function fetchMessage() {
+      fetching = true
       try{
       const url = "/api/rooms/{{room.id}}";
       response = await fetch(url);
@@ -199,14 +200,19 @@
       <div class="thread__details">No Message Yet</div>
     </div>`
     }
+
+    fetching = false
   }
   catch(err){
-    alert("Error Occured While Fetching Messages... Pls refresh")
+    console.log(err)
+    fetching = false
   }
 }
 
     setInterval(() => {
-      fetchMessage()
+      if(fetching==false){
+        fetchMessage()
+      }
     }, 1000);
     fetchMessage()
   });
