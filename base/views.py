@@ -38,11 +38,10 @@ def registerPage(request):
         if form.is_valid():
             user = form.save(commit= False)
             user.username = user.username.lower()
-            user.save()     
-            login(request, user)
+            user.save()   
+            login(request, user,backend='django.contrib.auth.backends.ModelBackend')
             return redirect("home")
-        else:
-            messages.error(request, "Account creation failed")
+             
     context = {"form":form}
     return render(request, "base/login_reg.html", context)
 
@@ -59,7 +58,7 @@ def home(request):
     room_count = rooms.count()
     room_messages = Message.objects.filter(
         Q(room__topic__name__icontains = search)
-        )
+        )[:5]
     context = {
         "rooms":rooms,
         "topics":topic,

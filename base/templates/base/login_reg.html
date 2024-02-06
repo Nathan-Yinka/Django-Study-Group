@@ -2,7 +2,7 @@
 {% block content %}
 {% if page == "login" %}
     <main class="auth layout">
-      <div class="container">
+      <div class="container ">
         <div class="layout__box">
           <div class="layout__boxHeader">
             <div class="layout__boxTitle">
@@ -14,7 +14,7 @@
             <form class="form" action="" method="POST">
               {% csrf_token %}
               <div class="form__group form__group">
-                <label for="room_name">Username</label>
+                <label for="room_name">Username/Email</label>
                 <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" />
               </div>
               <div class="form__group">
@@ -63,7 +63,7 @@
         <div class="layout__box">
           <div class="layout__boxHeader">
             <div class="layout__boxTitle">
-              <h3>Sign up</h3>
+              <h3 class="">Sign up</h3>
             </div>
           </div>
           <div class="layout__body">
@@ -72,12 +72,16 @@
             <form class="form" action="" method="POST">
               {% csrf_token %}
               {% for field in form %}
-              <div class="form__group form__group">
-                <label for="fullname">{{field.label}}</label>
-               {{field}}
-              </div>
-              {% endfor %}
-
+    <div class="form__group form__group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+        <div class="text-danger">
+            {{ field.errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
               <button class="btn btn--main" type="submit">
                 <svg
                   version="1.1"

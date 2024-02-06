@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path,os
+import os
+from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,11 +47,16 @@ INSTALLED_APPS = [
     
     'rest_framework',
     "corsheaders",
+    
+    'cloudinary_storage',
+    'cloudinary',
+    
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,6 +135,10 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR/"static"
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
 MEDIA_URL = '/assets/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/assets')
 
@@ -137,3 +151,23 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 AUTH_USER_MODEL = "base.User"
+
+AUTHENTICATION_BACKENDS = [
+    'base.backend.EmailOrUsernameModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUD_NAME'),
+    'API_KEY': os.getenv('API_KEY'),
+    'API_SECRET': os.getenv('API_SECRET'),
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+database_url = os.environ.get("DATABASE_URL")
+db_from_env = dj_database_url.config(default=database_url)
+
+DATABASES = {
+    'default': db_from_env
+}
